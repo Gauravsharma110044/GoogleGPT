@@ -9,7 +9,7 @@ interface UserAvatarProps {
 const BotAvatar = ({className}: UserAvatarProps) => {
   return (
     <Avatar className={cn("h-7 w-7 md:h-8 md:w-8", className)}>
-      <AvatarImage src='/ChatGPT Image Jun 2, 2025, 01_59_06 PM.png' alt="GoogleGPT" />
+      <AvatarImage src='/favicon_32x32gs.ico' alt="GoogleGPT" />
       <AvatarFallback>GoogleGPT</AvatarFallback>
     </Avatar>
   )

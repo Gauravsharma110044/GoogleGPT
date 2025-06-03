@@ -1,24 +1,24 @@
-import { Chat, User } from '@prisma/client'
+import { Chat, User } from '@/types'
 import { Menu } from 'lucide-react'
-import React from 'react'
+import { Button } from './ui/button'
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
 import SideBar from './sidebar/SideBar'
 
 interface MobileSidebarProps {
-  chats: Chat[]
-  user: User
+  chats: Chat[];
+  user: User;
 }
 
-const MobileSidebar = ({chats, user}: MobileSidebarProps) => {
+const MobileSidebar = ({ chats, user }: MobileSidebarProps) => {
   return (
     <Sheet>
-      <SheetTrigger>
-        <button className='px-2 py-2 mr-2 rounded-md hover:bg-zinc-700/30 transition lg:hidden'>
-          <Menu className='h-5 w-5 text-gray-300' />
-        </button>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Menu />
+        </Button>
       </SheetTrigger>
-      <SheetContent side='left' className='p-0 flex gap-0 border-0'>
-        <SideBar />
+      <SheetContent side="left" className="p-0 bg-secondary pt-10 w-72">
+        <SideBar chats={chats} user={user} />
       </SheetContent>
     </Sheet>
   )

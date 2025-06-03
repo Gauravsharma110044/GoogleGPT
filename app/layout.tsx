@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/ChatGPT Image Jun 2, 2025, 01_59_06 PM.png",
-        href: "/ChatGPT Image Jun 2, 2025, 01_59_06 PM.png",
+        url: "/favicon_32x32gs.ico",
+        href: "/favicon_32x32gs.ico",
       },
     ],
   },
@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" type="image/png" href="/ChatGPT Image Jun 2, 2025, 01_59_06 PM.png" />
+        <link rel="icon" type="image/x-icon" href="/favicon_32x32gs.ico" />
       </head>
       <body
         className={cn(

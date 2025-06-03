@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { Chat, Message } from '@prisma/client'
+import { Chat, Message } from '@/types'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -27,12 +27,10 @@ const item = {
 };
 
 interface ChatRecommendationProps {
-  chat: Chat & {
-    messages: Message[]
-  }
+  chat: Chat
 }
 
-type Recommendation = {
+interface Recommendation {
   title: string;
   sub: string;
 }
@@ -69,8 +67,7 @@ const ChatRecommendation = ({chat}: ChatRecommendationProps) => {
   return (
     <div className='flex flex-col flex-1 justify-center items-center'>
       <div className='flex flex-col items-center space-y-5 fixed'>
-        {/* <BotAvatar className='w-10 h-10' /> */}
-        <Image src='/chatgpt.png' alt='chatgpt' width={60} height={60} className='rounded-full' />
+        <Image src='/favicon_32x32gs.ico' alt='GoogleGPT' width={60} height={60} className='rounded-full' />
         <h2 className='text-2xl font-semibold'>How can I help you today?</h2>
       </div>
 

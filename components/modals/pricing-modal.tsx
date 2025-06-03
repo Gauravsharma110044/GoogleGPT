@@ -14,7 +14,7 @@ const PLANS = [
     "name": "Free",
     "price": "USD $0/month",
     "action": "Your current Plan",
-    "description": "For people just getting started with ChatGPT",
+    "description": "For people just getting started with GoogleGPT",
     "features": [
       "Unlimited messages, interactions, and history",
       "Access to our GPT-3.5 model",
@@ -46,55 +46,55 @@ const PLANS = [
   }
 ]
 
-
 export const PricingModal = () => {
+  const { isOpen, onClose, type } = useModal()
+  const isModalOpen = isOpen && type === "pricing"
   const router = useRouter()
-  const {data, isOpen, onClose, onOpen, type} = useModal()
-  const isModalOpen = isOpen && type === 'pricing'
-  const [isLoading, setIsLoading] = useState(false)
-  const {chat} = data
-  const onDelete = async () => {
+
+  const handleUpgrade = async (plan: string) => {
     try {
-      setIsLoading(true)
-      await axios.delete(`/api/chat/${chat?.id}`)
-      onClose()
-      router.push('/')
-      router.refresh()
+      const response = await axios.post('/api/checkout', { plan })
+      router.push(response.data.url)
     } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoading(false)
+      console.error('Error upgrading plan:', error)
     }
   }
 
-  return(
+  return (
     <Dialog open={isModalOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-[#2f2f2f] text-white px-10 min-w-[60%]">
-        <DialogHeader className="pt-8 px-6">
-            <DialogTitle className="text-2xl text-left font-bold">Upgrade your plan</DialogTitle>
-            <Separator className="h-[1px] bg-gray-700 my-3 mt-5" />
+      <DialogContent className="bg-[#1E1E1E] text-white border-none">
+        <DialogHeader>
+          <DialogTitle className="text-2xl font-bold text-center">Upgrade to GoogleGPT Plus</DialogTitle>
+          <DialogDescription className="text-center text-zinc-400">
+            Choose the plan that's right for you
+          </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-3 gap-5">
-          {PLANS.map((plan, idx) => {
-            return (
-              <div className="px-5">
-                <h3 className="font-bold text-xl">{plan.name}</h3>
-                <p className="text-sm text-gray-300">{plan.price}</p>
-                <Button className={cn("w-full my-5", plan.name === 'Team' && 'bg-blue-600 hover:bg-blue-600/80', plan.name === 'Free' && 'bg-slate-600 hover:bg-slate-600/80')} variant={'green'} disabled={plan.name === 'Free'}>{plan.action}</Button>
-                <div className="text-sm">
-                  <p className="my-2">{plan.description}</p>
-                  <ul className="space-y-2">
-                    {plan.features.map((feature) => {
-                      return (<li className="flex space-x-3"><Check className="flex-shrink-0 w-4 h-4" /><span>{feature}</span></li>)
-                    })}
-                  </ul>
-                </div>
-              </div>
-            )
-          })}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          {PLANS.map((plan) => (
+            <div key={plan.name} className="border border-zinc-700 rounded-lg p-4">
+              <h3 className="text-xl font-bold">{plan.name}</h3>
+              <p className="text-2xl font-bold mt-2">{plan.price}</p>
+              <p className="text-sm text-zinc-400 mt-1">{plan.description}</p>
+              <ul className="mt-4 space-y-2">
+                {plan.features.map((feature, index) => (
+                  <li key={index} className="flex items-center gap-2">
+                    <Check className="h-4 w-4 text-green-500" />
+                    <span className="text-sm">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <Button
+                className="w-full mt-4"
+                variant={plan.name === "Free" ? "outline" : "default"}
+                onClick={() => handleUpgrade(plan.name)}
+              >
+                {plan.action}
+              </Button>
+            </div>
+          ))}
         </div>
         <Separator className="h-[1px] bg-gray-700" />
-        <p className="text-center text-sm">Need more capabilities? See <span className={cn(buttonVariants({variant: "link"}), 'cursor-pointer')}>ChatGPT Enterprise</span></p>
+        <p className="text-center text-sm">Need more capabilities? See <span className={cn(buttonVariants({variant: "link"}), 'cursor-pointer')}>GoogleGPT Enterprise</span></p>
       </DialogContent>
     </Dialog>
   )
