@@ -1,5 +1,5 @@
 import { currentUser } from "@/lib/current-user"
-import prisma from "@/lib/prisma"
+import connectDB from "@/lib/mongodb"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request){
@@ -9,15 +9,33 @@ export async function POST(req: Request){
       return new NextResponse('Unauthorized', {status: 401})
     }
 
-    const chat = await prisma.chat.create({
-      data: {
-        userId: user.id,
-        name: 'New Chat'
-      }
-    })
-    if(!chat){
+    const mongoose = await connectDB();
+    if (!mongoose.connection.db) {
+      throw new Error('Database connection failed');
+    }
+    const db = mongoose.connection.db;
+
+    const result = await db.collection('chats').insertOne({
+      userId: user.id,
+      name: 'New Chat',
+      messages: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    if(!result.insertedId){
       return new NextResponse('Failed to create new chat', {status: 400})
     }
+
+    const chat = {
+      id: result.insertedId.toString(),
+      userId: user.id,
+      name: 'New Chat',
+      messages: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
     return NextResponse.json(chat)
   } catch (error) {
     console.log(error)
